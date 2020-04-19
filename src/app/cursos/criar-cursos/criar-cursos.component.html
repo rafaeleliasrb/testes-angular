@@ -1,0 +1,20 @@
+<h2>Criar-Curso Service</h2>
+
+Novo Curso: <input type="text" #novoCurso/>
+<br><br>
+<button class="btn btn-primary" (click)="adicionarCurso(novoCurso.value)">
+    Adicionar Curso
+</button>
+
+<br><br>
+
+<p *ngIf="ultimoCursoCriado">
+    Último curso criado foi: {{ ultimoCursoCriado }}
+</p>
+<div>Cursos criados:</div>
+<ul>
+    <li *ngFor="let curso of cursos">
+        {{ curso }}
+    </li>
+</ul>
+

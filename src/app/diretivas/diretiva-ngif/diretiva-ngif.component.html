@@ -1,0 +1,27 @@
+<h2>Diretiva *ngIf</h2>
+
+<div *ngIf="cursos.length > 0">
+    Lista de cursos
+</div>
+
+<div *ngIf="cursos.length == 0">
+    Não há cursos
+</div>
+
+<div *ngIf="exibe">
+    Exibir
+</div>
+
+<div *ngIf="!exibe">
+    Esconder
+</div>
+
+<button class="btn btn-primary" (click)="exibeToggle()">Toggle</button>
+
+<div [hidden]="!exibe">
+    Exibir
+</div>
+
+<div [hidden]="exibe">
+    Esconder
+</div>

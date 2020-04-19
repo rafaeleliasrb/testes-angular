@@ -1,0 +1,121 @@
+<section class="data-binding">
+    <h2>Data-binding</h2>
+    <br>
+
+    Selecione uma classe:
+    <select #classe (change)="0">
+        <option value="alert-success">Sucesso</option>
+        <option value="alert-info">Info</option>
+        <option value="alert-warning">Alerta</option>
+        <option value="alert-danger">Erro</option>
+    </select>
+    
+    <br><br>
+    
+    <div class="alert {{ classe.value }}">
+        Texto colorido de acordo com o combobox
+    </div>
+    
+    <div class="alert" role="alert" 
+        [class.alert-success]="classe.value == 'alert-success'">Sucesso</div>
+    <div class="alert alert-info" role="alert"
+        [class.alert-info]="classe.value == 'alert-info'">Info</div>
+    <div class="alert alert-warning" role="alert"
+        [class.alert-warning]="classe.value == 'alert-warning'">Alerta</div>
+    <div class="alert alert-danger" role="alert"
+        [class.alert-danger]="classe.value == 'alert-danger'">Erro</div>
+    
+    <div class="alert alert-danger"
+        [style.display]="classe.value == 'alert-danger' ? 'block' : 'none'">
+        Esse texto aparece somente em caso de erro
+    </div>
+</section>
+
+<br><br>
+
+<section>
+    <h2>Event-binding</h2>
+    <br>
+    <button (click)="botaoClicado()" class="btn btn-primary">Me clique</button>
+
+    <br><br>
+
+    <input type="text" 
+        (keyup)="onKeyUp($event)" 
+        (keyup.enter)="salvarValor($event.target.value)"
+        (blur)="salvarValor(valor.value)"
+        #valor
+        />
+
+    <p>Valor atual: {{ valorAtual }}</p>
+    <p>Valor salvo: {{ valorSalvo }}</p>
+
+    <br>
+    <span 
+        (mouseover)="onMouseOverOut()"
+        (mouseout)="onMouseOverOut()"
+        [class.highlight]="isMouseOver">Passe o mouse</span>
+
+</section>
+
+<br><br>
+
+<section>
+    <h2>Two way Data-binding</h2>
+    <br>
+    <input type="text" 
+        [value]="nome"
+        (input)="nome = $event.target.value"/>
+
+    <br><br>
+
+    <input type="text" 
+        [ngModel]="nome"
+        (ngModelChange)="nome = $event"/>
+
+    <br><br>
+
+    <input type="text" 
+        [(ngModel)]="nome"/>
+    
+    <p>Vode digitou: {{ nome }}</p>
+</section>
+
+<br><br>
+
+<section>
+    <h2>Input property</h2>
+    <br>
+
+    <app-input-property [nomeCurso]="nomeDoCurso"></app-input-property>
+</section>
+
+<br><br>
+
+<section>
+    <h2>Output property</h2>
+    <br>
+
+    <app-output-property 
+        [valor]="valorInicial"
+        (mudouValor)="onMudouValor($event)">
+    </app-output-property>
+</section>
+
+<br><br>
+
+<section>
+    <h2>Ciclo de vida</h2>
+
+    <app-ciclo [valorInicial]="valorCicloDeVida" *ngIf="exibirComponenteCicloDeVida"></app-ciclo>
+
+    <button class="btn btn-primary" (click)="mudarValorCicloDeVida()">
+        Mudar valor
+    </button>
+
+    <br>
+
+    <button class="btn btn-primary" (click)="destruirComponenteCicloDeVida()">
+        Destruir
+    </button>
+</section>

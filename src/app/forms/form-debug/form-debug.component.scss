@@ -1,0 +1,31 @@
+pre {
+    background: rgba(0,0,0,.01);
+    border: .5px solid rgba(0,0,0,.03);
+}
+
+pre {
+    border-radius: 5px;
+    display: block;
+    margin: 16px auto;
+    overflow-x: auto;
+    padding: 20px;
+    white-space: pre-wrap;
+}
+
+pre {
+    font-size: 14px;
+}
+
+pre code {
+    background: transparent;
+}
+
+pre code {
+    padding: 0;
+    font-size: 100%;
+}
+
+code, pre {
+    font-family: Roboto Mono,monospace;
+}
+

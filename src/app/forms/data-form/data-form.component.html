@@ -1,6 +1,10 @@
 <div class="row">
     <form class="example-form" [formGroup]="formulario" (ngSubmit)="onSubmit()">
         <p>
+            <!-- <app-input-field classeCss="example-full-width" label="Nome" placeholder="Maria"
+                [temErro]="temErroRequerido('nome')" mensagemErro="Nome é obrigatório"
+                formControlName="nome">
+            </app-input-field> -->
             <mat-form-field class="example-full-width">
                 <mat-label>Nome</mat-label>
                 <input matInput placeholder="Maria" formControlName="nome"
@@ -8,8 +12,6 @@
                 <mat-error *ngIf="temErroRequerido('nome')">
                     Nome é <strong>obrigatório</strong>
                 </mat-error>
-                <!-- <app-error-msg [control]="formulario.get('nome')" label="Nome">
-                </app-error-msg> -->
             </mat-form-field>
         </p>
         <p>
@@ -98,8 +100,13 @@
                 
                 <td><mat-form-field class="example-full-width">
                     <mat-label>Cidade</mat-label>
-                    <input matInput placeholder="Fortaleza" formControlName="cidade"
-                        [errorStateMatcher]="matcher">
+                    <!-- <input matInput placeholder="Fortaleza" formControlName="cidade"
+                        [errorStateMatcher]="matcher"> -->
+                    <mat-select formControlName="cidade" [errorStateMatcher]="matcher">
+                        <mat-option *ngFor="let cidade of cidades" [value]="cidade">
+                            {{ cidade }}
+                        </mat-option>
+                    </mat-select>
                     <mat-error *ngIf="temErroRequerido('endereco.cidade')">
                         Cidade é <strong>obrigatória</strong>
                     </mat-error>
@@ -108,7 +115,7 @@
                 <td><mat-form-field class="example-full-width">
                     <mat-label>Estado</mat-label>
                     <mat-select formControlName="estado" [errorStateMatcher]="matcher">
-                        <mat-option *ngFor="let estado of estados | async" [value]="estado.sigla">
+                        <mat-option *ngFor="let estado of estados" [value]="estado.sigla">
                             {{ estado.nome }}
                         </mat-option>
                     </mat-select>

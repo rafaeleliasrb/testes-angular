@@ -1,0 +1,23 @@
+<form class="example-form" [formGroup]="formulario">
+    <p>
+        <mat-form-field class="example-full-width">
+            <mat-label>Nome</mat-label>
+            <input matInput placeholder="Novo curso" formControlName="nome"
+                [errorStateMatcher]="matcher">
+            <mat-error *ngIf="temErro('nome') && temErro('nome')['required']">
+                Nome é <strong>obrigatório</strong>
+            </mat-error>
+            <mat-error *ngIf="temErro('nome') && temErro('nome')['minlength']">
+                Nome precisa de no <strong>mínimo {{ temErro('nome')['minlength'].requiredLength }}</strong> caracteres
+            </mat-error>
+            <mat-error *ngIf="temErro('nome') && temErro('nome')['maxlength']">
+                Nome precisa de no <strong>máximo {{ temErro('nome')['maxlength'].requiredLength }}</strong> caracteres
+            </mat-error>
+        </mat-form-field>
+    </p>
+
+    <div class="example-button-row">
+        <button mat-raised-button color="primary" type="button" (click)="onSubmit()">Salvar</button>
+        <button mat-raised-button color="warn" type="button" (click)="onCancel()">Cancelar</button>
+    </div>
+</form>

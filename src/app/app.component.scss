@@ -1,0 +1,21 @@
+.div-central-main {
+    padding: 20px 70px 0;
+    display: block;
+    text-align: center;
+}
+
+.div-central-row  {
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-align: start;
+    align-items: flex-start;
+    text-align: left;
+    max-width: 940px;
+    margin: 0 auto;
+}
+
+.conteudo {
+    -webkit-box-flex: 1;
+    flex-grow: 1;
+    width: 80%;
+}

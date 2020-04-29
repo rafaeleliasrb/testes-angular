@@ -5,6 +5,15 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import localept from '@angular/common/locales/pt';
 import { registerLocaleData } from '@angular/common';
 
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
+
 import { AppRoutingModule } from './app.routing.module';
 import { AppComponent } from './app.component';
 import { DataBindingComponent } from './data-binding/data-binding.component';
@@ -25,15 +34,7 @@ import { PaginaNaoEncontradaComponent } from './pagina-nao-encontrada/pagina-nao
 import { TemplateFormModule } from './forms/template-form/template-form.module';
 import { DataFormModule } from './forms/data-form/data-form.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatButtonModule } from '@angular/material/button';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatIconModule } from '@angular/material/icon';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatListModule } from '@angular/material/list';
-import { MatSelectModule } from '@angular/material/select';
+import { CursosModule } from './http/cursos.module';
 
 registerLocaleData(localept, 'pt');
 
@@ -45,7 +46,8 @@ const materialModules = [
   MatIconModule,
   MatInputModule,
   MatFormFieldModule,
-]
+  MatMenuModule,
+];
 
 @NgModule({
   declarations: [
@@ -73,6 +75,7 @@ const materialModules = [
     TemplateFormModule,
     DataFormModule,
     BrowserAnimationsModule,
+    CursosModule,
     materialModules
   ],
   providers: [

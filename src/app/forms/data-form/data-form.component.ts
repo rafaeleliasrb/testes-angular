@@ -1,47 +1,52 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+
+import { map, distinctUntilChanged, tap, switchMap } from 'rxjs/operators';
+import { empty, Subscription } from 'rxjs';
 
 import { Estado } from '../model/estado';
 import { DropdownService } from '../service/dropdown.service';
 import { ConsultaCepService } from '../service/consulta-cep.service';
 import { MyErrorStateMatcher } from '../my-error-state-matcher';
-import { Observable, empty } from 'rxjs';
 import { FormValitions } from '../form-validations';
 import { EmailsService } from '../service/emails.service';
-import { map, distinctUntilChanged, tap, switchMap } from 'rxjs/operators';
+import { BaseFormComponent } from '../base-form/base-form.component';
 
 @Component({
   selector: 'app-data-form',
   templateUrl: './data-form.component.html',
   styleUrls: ['./data-form.component.scss']
 })
-export class DataFormComponent implements OnInit {
+export class DataFormComponent extends BaseFormComponent implements OnInit, OnDestroy {
 
   constructor(
     private formBuilder: FormBuilder,
     private httpClient: HttpClient,
     private dropdownService: DropdownService,
     private cepService: ConsultaCepService,
-    private emailsService: EmailsService) { }
-
-  get frameworksSelecionados() {
-    return this.formulario.get('frameworksSelecionados') as FormArray;
-  }
+    private emailsService: EmailsService) {
+      super();
+    }
 
   MINIMO_FRAMEWORKS = 2;
 
   matcher = new MyErrorStateMatcher();
 
-  formulario: FormGroup;
-  estados: Observable<Estado[]>;
+  inscricaoEstados: Subscription;
+  inscricaoCep: Subscription;
+  inscricaoCidades: Subscription;
+
+  estados: Estado[];
+  cidades: string[];
   cargos: any[];
   tecnologias: any[];
   newsletterOp: any[];
   frameworks: any[];
 
   ngOnInit(): void {
-    this.estados = this.dropdownService.getEstados();
+    this.inscricaoEstados = this.dropdownService.getEstados()
+      .subscribe(dados => this.estados = dados);
     this.cargos = this.dropdownService.getCagos();
     this.tecnologias = this.dropdownService.getTecnologias();
     this.newsletterOp = this.dropdownService.getNewsletterOps();
@@ -67,17 +72,24 @@ export class DataFormComponent implements OnInit {
       frameworksSelecionados: this.buildFrameworks()
     });
 
-    this.formulario.get('endereco.cep').statusChanges
+    this.inscricaoEstados = this.formulario.get('endereco.cep').statusChanges
       .pipe(
         distinctUntilChanged(),
         tap(value => console.log('status do Cep: ', value)),
         switchMap((value: string) => value === 'VALID' ?
           this.cepService.consultaCep(this.formulario.get('endereco.cep').value) : empty())
-      ).subscribe((dados: any) => dados ?
-        this.populaDadosEndereco(dados) : {});
+      )
+      .subscribe((dados: any) => dados ? this.populaDadosEndereco(dados) : {});
+
+    this.inscricaoCidades = this.formulario.get('endereco.estado').valueChanges
+      .pipe(
+        tap(sigla => console.log('Novo estado: ', sigla)),
+        switchMap((sigla: string) => this.dropdownService.getCidadesPorEstado(sigla))
+      )
+      .subscribe(dados => this.cidades = dados);
   }
 
-  onSubmit() {
+  submit() {
     let valueSubmit = Object.assign({}, this.formulario.value);
 
     valueSubmit = Object.assign(valueSubmit, {
@@ -86,17 +98,12 @@ export class DataFormComponent implements OnInit {
         .filter((valor: FormControl) => valor !== null)
     });
 
-    if (this.formulario.valid) {
-      this.httpClient.post('https://httpbin.org/post', JSON.stringify(valueSubmit))
-        .subscribe(response => {
-          console.log(response);
-          // this.resetar();
-        },
-        (error) => alert(error));
-    }
-    else {
-      this.validarCampos(this.formulario);
-    }
+    this.httpClient.post('https://httpbin.org/post', JSON.stringify(valueSubmit))
+      .subscribe(response => {
+        console.log(response);
+        // this.resetar();
+      },
+      (error) => alert(error));
   }
 
   buildFrameworks() {
@@ -106,16 +113,6 @@ export class DataFormComponent implements OnInit {
       FormValitions.requiredMinCheckbox(this.MINIMO_FRAMEWORKS));
   }
 
-  validarCampos(formGroup: FormGroup) {
-    Object.keys(formGroup.controls).forEach(campo => {
-      const controle = formGroup.get(campo);
-      controle.markAsTouched();
-      if (controle instanceof FormGroup) {
-        this.validarCampos(controle);
-      }
-    });
-  }
-
   consultaCep() {
     const cepControl = this.formulario.get('endereco.cep');
     const cep = cepControl.value;
@@ -123,7 +120,7 @@ export class DataFormComponent implements OnInit {
     if (cepControl.valid) {
         this.resetaDadosEndereco();
 
-        this.cepService.consultaCep(cep)
+        this.inscricaoCep = this.cepService.consultaCep(cep)
           .subscribe((dados: any) => this.populaDadosEndereco(dados));
     }
   }
@@ -196,8 +193,19 @@ export class DataFormComponent implements OnInit {
     });
   }
 
-  resetar() {
-    this.formulario.reset();
-    this.formulario.markAsUntouched();
+  get frameworksSelecionados() {
+    return this.formulario.get('frameworksSelecionados') as FormArray;
+  }
+
+  ngOnDestroy(): void {
+    if (this.inscricaoEstados){
+      this.inscricaoEstados.unsubscribe();
+    }
+    if (this.inscricaoCep) {
+      this.inscricaoCep.unsubscribe();
+    }
+    if (this.inscricaoCidades) {
+      this.inscricaoCidades.unsubscribe();
+    }
   }
 }

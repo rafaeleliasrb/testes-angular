@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
+import { map, filter, flatMap } from 'rxjs/operators';
+
 import { Estado } from '../model/estado';
 
 @Injectable({
@@ -41,5 +43,13 @@ export class DropdownService {
 
   getFrameworks() {
     return ['Angular', 'React', 'Vue', 'JQuery'];
+  }
+
+  getCidadesPorEstado(sigla: string): Observable<string[]> {
+    return this.httpClient.get('assets/dados/cidades-estados.json').pipe(
+      flatMap((estados: {sigla: string, nome: string, cidades: string[]}[]) => estados),
+      filter(estado => estado.sigla === sigla),
+      map(estado => estado.cidades)
+    );
   }
 }

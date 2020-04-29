@@ -1,0 +1,13 @@
+<div class="header-flex">
+    <h1 mat-dialog-title>{{ data.titulo }}</h1>
+    <span class="flex"></span>
+    <button mat-icon-button (click)="onNoClick()" aria-label="Close">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
+<div mat-dialog-content>
+    <p>{{ data.mensagem }}</p>
+</div>
+<!-- <div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Fechar</button>
+</div> -->

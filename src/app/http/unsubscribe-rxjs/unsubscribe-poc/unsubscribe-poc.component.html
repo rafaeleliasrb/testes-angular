@@ -1,0 +1,24 @@
+<h3>RxJS POC - Unsubscribe</h3>
+
+<form>
+    <table cellspacing="0"><tr>
+        <td><mat-form-field>
+            <mat-label>Nome</mat-label>
+            <input matInput placeholder="Valor" #valor>
+        </mat-form-field></td>
+
+        <td><button mat-raised-button color="primary" (click)="emitirValor(valor.value)" 
+            type="button">Emitir valor</button></td>
+
+        <td><button mat-raised-button color="accent" (click)="destruirComponentes()" 
+            type="button">Mostrar / Destruir componentes</button></td>
+    </tr></table>
+</form>
+
+<mat-grid-list cols="4" rowHeight="2:1" *ngIf="mostraComponentes">
+    <mat-grid-tile><app-poc></app-poc></mat-grid-tile>
+    <mat-grid-tile><app-poc-unsub></app-poc-unsub></mat-grid-tile>
+    <mat-grid-tile><app-poc-async></app-poc-async></mat-grid-tile>
+    <mat-grid-tile><app-poc-take-until></app-poc-take-until></mat-grid-tile>
+    <mat-grid-tile><app-poc-take></app-poc-take></mat-grid-tile>
+</mat-grid-list>

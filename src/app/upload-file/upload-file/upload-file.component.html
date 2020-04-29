@@ -1,0 +1,17 @@
+<div>
+    <button mat-raised-button type="button" (click)="onClick()">Selecionar arquivos</button>
+    <span>{{ fileNames }}</span>
+    <input type="file" #fileUpload multiple hidden (change)="onChange($event)">
+    <mat-progress-bar class="margin-top" mode="determinate" [value]="progress"></mat-progress-bar>
+    <p class="margin-top">
+        <button mat-raised-button color="primary" type="button" (click)="onUpload()" 
+            [disabled]="!files">Upload</button>
+    </p>
+
+    <br>
+
+    <p>
+        <button mat-raised-button color="primary" type="button" 
+            (click)="onDownload()">Download</button>
+    </p>
+</div>    
